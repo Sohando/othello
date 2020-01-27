@@ -1,5 +1,5 @@
 //www.101Computing.net/othello-game/
-var debug = document.getElementById("bug");
+// var debug = document.getElementById("bug");
 var player = 1; //1 for White, 2 for Black
 var grid = [
     [0, 0, 0, 0, 0, 0, 0, 0],
@@ -189,7 +189,7 @@ function validMoves() {
 
 //A function used to refresh the Othello grid on screen
 function refreshGrid() {
-	debug.innerHTML = player;
+	// debug.innerHTML = player;
     resetValid();
     validMoves();
     for (var row = 0; row < 8; row++) {
