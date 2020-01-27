@@ -75,28 +75,33 @@ function selectCell(row,col) {
     }
 
     if (player == 2) {
-      console.log(row, col);
+      // console.log(row, col);
       for (var i = 0; i < 8; ++i) {
         var x = row + dx[i];
         var y = col + dy[i];
         var flag = false;
-        var t1 = row;
-        var t2 = col;
-        while (limit(x, y)) {
-          
-          if (grid[x][y] == 1) {
-            flag = true;
-            break;
-          }
-          x += dx[i];
-          y += dy[i];
+        
+        if (grid[x][y] == 2) {
+        	x += dx[i];
+        	y += dy[i];
+        	while (limit(x, y)) {
+        		if (grid[x][y] == 1) {
+        			flag = true;
+        			break;
+        		}
+        		x += dx[i];
+        		y += dy[i];
+        	}
         }
         if (flag) {
+        	var t1 = row;
+        	var t2 = col;
           while (t1 !=x || t2 != y) {
             grid[t1][t2] = 1;
             t1 += dx[i];
             t2 += dy[i];
           }
+          break;
         }
       }      
     }
@@ -105,23 +110,28 @@ function selectCell(row,col) {
         var x = row + dx[i];
         var y = col + dy[i];
         var flag = false;
-        var t1 = row;
-        var t2 = col;
-        while (limit(x, y)) {
-          
-          if (grid[x][y] == 2) {
-            flag = true;
-            break;
-          }
-          x += dx[i];
-          y += dy[i];
+        
+        if (grid[x][y] == 1) {
+        	x += dx[i];
+        	y += dy[i];
+        	while (limit(x, y)) {
+        		if (grid[x][y] == 2) {
+        			flag = true;
+        			break;
+        		}
+        		x += dx[i];
+        		y += dy[i];
+        	}
         }
         if (flag) {
+        	var t1 = row;
+        	var t2 = col;
           while (t1 !=x || t2 != y) {
             grid[t1][t2] = 2;
             t1 += dx[i];
             t2 += dy[i];
           }
+          break;
         }
       }   
     }
@@ -163,7 +173,7 @@ function validMoves() {
                 }
                
               }
-              if (flag) {
+              if (flag && !grid[row][col]) {
                 valid[row][col] = 1;
                 grid[row][col] = 3;
               }
@@ -206,8 +216,8 @@ function validMoves() {
                     break;
                   }
                 }
-                if (flag) {
-                  console.log(row, col, "Found");
+                if (flag && !grid[row][col]) {
+                  // console.log(row, col, "Found");
                   valid[row][col] = 1;
                   grid[row][col] = 3;
                 }
@@ -242,7 +252,7 @@ function refreshGrid() {
                 document.getElementById("cell"+row+col).childNodes[0].style.backgroundColor="#000000";
       }
       else if (grid[row][col]==3){
-      	console.log(row, col, "colored red");
+      	// console.log(row, col, "colored red");
           document.getElementById("cell"+row+col).childNodes[0].style.backgroundColor="red";
       }
     }
