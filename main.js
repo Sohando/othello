@@ -1,4 +1,4 @@
-//www.101Computing.net/othello-game/
+
 // var debug = document.getElementById("bug");
 var player = 1; //1 for White, 2 for Black
 var grid = [
