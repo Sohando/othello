@@ -86,20 +86,22 @@ void Oh__Othello::Valid_Moves() {
 			int x = row + dx[i];
 			int y = col + dy[i];
 
-			if (ok(x, y)) {
+			if (ok(x, y) and Place_Board[x][y] == 3 - player) {
 				bool ret = false;
-				if (Place_Board[x][y] == 3 - player) {
-					while (ok(x, y)) {
-						if (Place_Board[x][y] == player) {
-							Valid_Board[{row, col}] = {x, y};
-							ret = true;
-							// cout << x << " " << y << endl;
-							break;
-						}
-						else if (Place_Board[x][y] == 0) break;
-						x += dx[i];
-						y += dy[i];
+				
+				x += dx[i];
+				y += dy[i];
+				while (ok(x, y)) {
+					if (Place_Board[x][y] == player) {
+						Valid_Board[{row, col}] = {x, y};
+						ret = true;
+						// cout << x << " " << y << endl;
+						break;
 					}
+					else if (Place_Board[x][y] == 0) break;
+					else if (Place_Board[x][y] == 3) break;
+					x += dx[i];
+					y += dy[i];
 				}
 				if (ret) return true;
 			}		
@@ -194,7 +196,78 @@ void Oh__Othello::Amar_Pocha_AI() {
 	auto Create_New_Board = [&](auto moves) {
 		Oh__Othello NBoard(player);
 		NBoard.clean();
-		NBoard.Value = Weight1[moves.first.first][moves.first.second];
+		// NBoard.Value = Weight1[moves.first.first][moves.first.second];
+		auto ValueCount = [&]() {
+			pair<int, int> ax = moves.second;
+			int x = moves.first.first;
+			int y = moves.first.second;
+			// NBoard.Value = 0;
+			if (ax.first == x) {
+				for (int i = min(ax.second, y); i <= max(ax.second, y); ++i) {
+					// Place_Board[x][i] = player;
+					NBoard.Value += Weight1[x][i];
+				}
+			}
+			else if(ax.second == y) {
+				for (int i = min(ax.first, x); i <= max(ax.first, x); ++i) {
+					// Place_Board[i][y] = player;
+					NBoard.Value += Weight1[x][i];
+				}
+			}
+			else {
+				int a = ax.first;
+				int b = ax.second;
+
+				if (x > a) {
+					// Niche Ache
+					if (y < b) {
+						// Left e Ache
+						NBoard.Value += Weight1[a][b];
+						while (x != a and y != b) {
+							a += 1;
+							b -= 1;
+							// Place_Board[a][b] = player;
+							NBoard.Value += Weight1[a][b];
+						}	
+					}
+					else {
+						// Right e Ache
+						NBoard.Value += Weight1[a][b];
+						while (x != a and y != b) {
+							a += 1;
+							b += 1;
+							// Place_Board[a][b] = player;
+							NBoard.Value += Weight1[a][b];
+						}
+					}
+				}
+				else {
+					// Upore Ache
+					if (y < b) {
+						// Left e Ache
+						NBoard.Value += Weight1[a][b];
+						while (x != a and y != b) {
+							a -= 1;
+							b -= 1;
+							// Place_Board[a][b] = player;
+							NBoard.Value += Weight1[a][b];
+						}
+					}
+					else {
+						// Right e Ache
+						NBoard.Value += Weight1[a][b];
+						while (x != a and y != b) {
+							a -= 1;
+							b += 1;
+							// Place_Board[a][b] = player;
+							NBoard.Value += Weight1[a][b];
+						}
+					}	
+				}	
+			}
+		};
+		ValueCount();
+
 		NBoard.boo.first = moves.first.first;
 		NBoard.boo.second = moves.first.second; 
 		return NBoard;		
@@ -203,9 +276,11 @@ void Oh__Othello::Amar_Pocha_AI() {
 	Oh__Othello best(player);
 	for (auto moves : Valid_Board) {
 		Oh__Othello fun = Create_New_Board(moves);
+		cout << fun.Value << " --> " << fun.boo.first << " " << fun.boo.second << endl;
 		if (fun.Value > mini) {
 			mini = fun.Value;
 			best = fun;
+			cout << " Dukche\n";
 		}
 	}
 	cout << "AI MOVED TO " << best.boo.first + 1 << " " << best.boo.second + 1;	
