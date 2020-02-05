@@ -13,7 +13,7 @@ int Weight1[8][8] = {
 	{2, -1, 1, 0, 0, 1, -1, 2},
 	{-3, -4, -1, -1, -1, -1, -4, -3},
 	{4, -3, 2, 2, 2, 2, -3, 4}
-}; 
+};
 
 class Oh__Othello {
 private:
@@ -29,7 +29,7 @@ public:
 		Place_Board.resize(8, vector<int>(8));
 		Valid_Board.clear();
 	}
-	void reset();		
+	void reset();
 	void debug();
 	void play();
 	void Valid_Moves();
@@ -54,7 +54,7 @@ void Oh__Othello::Print_Board() {
 		}
 		cout << endl << endl;
 	}
-}		
+}
 
 void Oh__Othello::debug() {
 	for (auto first : Place_Board) {
@@ -62,8 +62,8 @@ void Oh__Othello::debug() {
 			cout << second << " ";
 		}
 		cout << endl;
-	}	
-}	
+	}
+}
 
 void Oh__Othello::reset() {
 	for (auto first : Place_Board) {
@@ -72,15 +72,15 @@ void Oh__Othello::reset() {
 		}
 	}
 	Place_Board[3][3] = Place_Board[4][4] = 1;
-	Place_Board[4][3] = Place_Board[3][4] = 2;				
-    
+	Place_Board[4][3] = Place_Board[3][4] = 2;
+
     Valid_Board.clear();
 }
 
 void Oh__Othello::Valid_Moves() {
 	auto ok = [&](int x, int y) {
 		return ((x >= 0 and x < 8) && (y >= 0 and y < 8));
-	};	
+	};
     auto valid = [&](int row, int col) {
 		for (int i = 0; i < 8; ++i) {
 			int x = row + dx[i];
@@ -88,7 +88,7 @@ void Oh__Othello::Valid_Moves() {
 
 			if (ok(x, y) and Place_Board[x][y] == 3 - player) {
 				bool ret = false;
-				
+
 				x += dx[i];
 				y += dy[i];
 				while (ok(x, y)) {
@@ -104,11 +104,11 @@ void Oh__Othello::Valid_Moves() {
 					y += dy[i];
 				}
 				if (ret) return true;
-			}		
+			}
     	}
     	return false;
     };
-    	
+
 	for (int i = 0; i < 8; ++i) {
 		for (int j = 0; j < 8; ++j) {
 			if (Place_Board[i][j] == 0) {
@@ -129,7 +129,7 @@ void Oh__Othello::clean() {
 			if (Place_Board[i][j] == 3) Place_Board[i][j] = 0;
 		}
 	}
-}	
+}
 void Oh__Othello::refresh(int x, int y) {
 	pair<int, int> ax = Valid_Board[{x, y}];
 	// cout << ax.first << " " << ax.second << endl;
@@ -185,11 +185,11 @@ void Oh__Othello::refresh(int x, int y) {
 					Place_Board[a][b] = player;
 				}
 			}
-		}	
+		}
 	}
-	clean();	
+	clean();
 	// debug();
-}	
+}
 void Oh__Othello::Amar_Pocha_AI() {
 	Valid_Moves();
 	// Create New Boards With This Moves
@@ -228,7 +228,7 @@ void Oh__Othello::Amar_Pocha_AI() {
 							b -= 1;
 							// Place_Board[a][b] = player;
 							NBoard.Value += Weight1[a][b];
-						}	
+						}
 					}
 					else {
 						// Right e Ache
@@ -262,28 +262,29 @@ void Oh__Othello::Amar_Pocha_AI() {
 							// Place_Board[a][b] = player;
 							NBoard.Value += Weight1[a][b];
 						}
-					}	
-				}	
+					}
+				}
 			}
 		};
 		ValueCount();
 
 		NBoard.boo.first = moves.first.first;
-		NBoard.boo.second = moves.first.second; 
-		return NBoard;		
+		NBoard.boo.second = moves.first.second;
+		return NBoard;
 	};
-	int mini = -1;		
+	int mini = -1;
 	Oh__Othello best(player);
 	for (auto moves : Valid_Board) {
 		Oh__Othello fun = Create_New_Board(moves);
-		cout << fun.Value << " --> (" << fun.boo.first + 1 << "," << fun.boo.second + 1 <<")" << endl;
+		cout << fun.Value << " = (" << moves.second.first << "," << moves.second.second << ") --> (" << fun.boo.first + 1 << "," << fun.boo.second + 1 <<")" << endl;
+
 		if (fun.Value > mini) {
 			mini = fun.Value;
 			best = fun;
-			cout << " Entered\n";
+			// cout << " Entered\n";
 		}
 	}
-	cout << "AI MOVED TO " << best.boo.first + 1 << " " << best.boo.second + 1;	
+	cout << "AI MOVED TO " << best.boo.first + 1 << " " << best.boo.second + 1;
 	refresh(best.boo.first, best.boo.second);
 	clean();
 }
@@ -291,7 +292,7 @@ void Oh__Othello::play() {
 	if (player == 2) {
 		// AI Will Play.
 		Amar_Pocha_AI();
-		player = 3 - player;				
+		player = 3 - player;
 	}
 	Valid_Moves();
 	 // debug();
@@ -300,19 +301,19 @@ void Oh__Othello::play() {
 	// cout << Valid_Board.size() << endl;
 	for (auto x : Valid_Board) {
 		cout << x.first.first + 1 << " " << x.first.second + 1 << endl;
-	}	
+	}
 	// cout << "Enter Your Choice: ";
 	int x, y;
 	while (cin >> x >> y) {
 		if (Place_Board[x - 1][y - 1] == 3) break;
-	}	
+	}
 	cout << endl;
 
 	if (x + y == -2) return;
 	refresh(x - 1, y - 1);
 	//Print_Board();
 	player = 3 - player;
-	play(); 
+	play();
 }
 int main() {
 	ios::sync_with_stdio(false);
