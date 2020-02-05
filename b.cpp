@@ -35,7 +35,7 @@ public:
 	void Valid_Moves();
 	void Print_Board();
 	void refresh(int, int);
-	void AI();
+	void Amar_Pocha_AI();
 	void clean();
 };
 
@@ -188,7 +188,7 @@ void Oh__Othello::refresh(int x, int y) {
 	clean();	
 	// debug();
 }	
-void Oh__Othello::AI() {
+void Oh__Othello::Amar_Pocha_AI() {
 	Valid_Moves();
 	// Create New Boards With This Moves
 	auto Create_New_Board = [&](auto moves) {
@@ -215,7 +215,7 @@ void Oh__Othello::AI() {
 void Oh__Othello::play() {
 	if (player == 2) {
 		// AI Will Play.
-		AI();
+		Amar_Pocha_AI();
 		player = 3 - player;				
 	}
 	Valid_Moves();
