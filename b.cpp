@@ -276,11 +276,11 @@ void Oh__Othello::Amar_Pocha_AI() {
 	Oh__Othello best(player);
 	for (auto moves : Valid_Board) {
 		Oh__Othello fun = Create_New_Board(moves);
-		cout << fun.Value << " --> " << fun.boo.first << " " << fun.boo.second << endl;
+		cout << fun.Value << " --> (" << fun.boo.first + 1 << "," << fun.boo.second + 1 <<")" << endl;
 		if (fun.Value > mini) {
 			mini = fun.Value;
 			best = fun;
-			cout << " Dukche\n";
+			cout << " Entered\n";
 		}
 	}
 	cout << "AI MOVED TO " << best.boo.first + 1 << " " << best.boo.second + 1;	
